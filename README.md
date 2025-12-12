@@ -227,7 +227,7 @@ This project follows the kata’s requirement to use AI tools transparently.
 
 ### Tools used
 
-- **ChatGPT** (via Perplexity)
+- **ChatGPT/Claude** (via Perplexity)
 - **(Optional, if true)** GitHub Copilot inside the editor for inline suggestions
 
 ### How AI was used
@@ -251,11 +251,10 @@ This project follows the kata’s requirement to use AI tools transparently.
 
 - **Debugging & refinement**
   - Assisted in resolving ESM/Jest issues like `"Cannot use import statement outside a module"`.
-  - Helped diagnose path problems between `tests/` and `src/` and refine error handling and inventory logic.
 
 ### Reflection on AI impact
 
 - AI sped up setup and reduced time spent on boilerplate and configuration, especially around Jest + ESM and seeding scripts.
 - Suggestions were treated as starting points; code was reviewed, edited, and debugged manually to ensure it matched the kata spec and personal style.
 - Using AI to think through tests first supported a consistent Red–Green–Refactor workflow and made it easier to keep high coverage.
-- For commits where AI helped significantly, a `Co-authored-by: ChatGPT <AI@users.noreply.github.com>` trailer was added, along with a short explanation of how AI was involved, to stay transparent while keeping clear ownership of design and implementation decisions.
+- For commits where AI helped significantly, a `Co-authored-by: ChatGPT/Claude <AI@users.noreply.github.com>` trailer was added, along with a short explanation of how AI was involved, to stay transparent while keeping clear ownership of design and implementation decisions.
