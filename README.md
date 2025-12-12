@@ -181,44 +181,44 @@ Base path: `/api/sweets`
 
 ---
 
-## Project structure
+## Project Structure
 
-.
-├── src
-│ ├── app.js
-│ ├── server.js
-│ ├── config
-│ │ └── db.js
-│ ├── middleware
-│ │ └── authMiddleware.js
-│ ├── models
-│ │ ├── user.model.js
-│ │ └── sweet.model.js
-│ ├── routes
-│ │ ├── auth.routes.js
-│ │ └── sweet.routes.js
-│ ├── services
-│ │ ├── authService.js
-│ │ ├── sweetService.js
-│ │ └── inventoryService.js
-│ └── validation
-│ └── sweetValidation.js
-├── scripts
-│ └── seed.js
-├── tests
-│ ├── health.test.js
-│ ├── authRegister.test.js
-│ ├── authLogin.test.js
-│ ├── authRoutes.test.js
-│ ├── authMiddleware.test.js
-│ ├── sweetValidation.test.js
-│ ├── sweetService.test.js
-│ ├── sweetUpdateDelete.test.js
-│ ├── sweetRoutes.test.js
-│ └── inventoryService.test.js
-└── jest.config.mjs
+src/
+├── app.js
+├── server.js
+├── config/
+│ └── db.js
+├── middleware/
+│ └── authMiddleware.js
+├── models/
+│ ├── user.model.js
+│ └── sweet.model.js
+├── routes/
+│ ├── auth.routes.js
+│ └── sweet.routes.js
+├── services/
+│ ├── authService.js
+│ ├── sweetService.js
+│ └── inventoryService.js
+└── validation/
+└── sweetValidation.js
 
-text
+scripts/
+└── seed.js
+
+tests/
+├── health.test.js
+├── authRegister.test.js
+├── authLogin.test.js
+├── authRoutes.test.js
+├── authMiddleware.test.js
+├── sweetValidation.test.js
+├── sweetService.test.js
+├── sweetUpdateDelete.test.js
+├── sweetRoutes.test.js
+└── inventoryService.test.js
+
+jest.config.mjs
 
 ---
 
