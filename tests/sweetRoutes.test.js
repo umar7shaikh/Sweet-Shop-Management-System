@@ -154,4 +154,56 @@ describe("Sweet HTTP routes", () => {
 
     expect(res.statusCode).toBe(204);
   });
+
+  it("should allow customer to purchase a sweet and reduce quantity", async () => {
+    const created = await Sweet.create({
+      name: "Buy Me",
+      category: "Test",
+      price: 20,
+      quantity: 5,
+    });
+
+    const res = await request(app)
+      .post(`/api/sweets/${created._id}/purchase`)
+      .set("Authorization", `Bearer ${customerToken}`)
+      .send({ amount: 2 });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("sweet");
+    expect(res.body.sweet.quantity).toBe(3);
+  });
+
+  it("should forbid purchase when insufficient stock", async () => {
+    const created = await Sweet.create({
+      name: "Low Stock",
+      category: "Test",
+      price: 20,
+      quantity: 1,
+    });
+
+    const res = await request(app)
+      .post(`/api/sweets/${created._id}/purchase`)
+      .set("Authorization", `Bearer ${customerToken}`)
+      .send({ amount: 5 });
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("should allow admin to restock a sweet", async () => {
+    const created = await Sweet.create({
+      name: "Restock Me",
+      category: "Test",
+      price: 20,
+      quantity: 1,
+    });
+
+    const res = await request(app)
+      .post(`/api/sweets/${created._id}/restock`)
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({ amount: 4 });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("sweet");
+    expect(res.body.sweet.quantity).toBe(5);
+  });
 });

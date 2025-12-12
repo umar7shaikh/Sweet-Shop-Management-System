@@ -7,6 +7,7 @@ import {
   updateSweet,
   deleteSweetById,
 } from "../services/sweetService.js";
+import Sweet from "../models/sweet.model.js";
 
 const router = express.Router();
 
@@ -63,5 +64,62 @@ router.delete("/:id", requireAuth, requireRole("admin"), async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
+// POST /api/sweets/:id/purchase (any auth user)
+router.post("/:id/purchase", requireAuth, async (req, res) => {
+  try {
+    const sweet = await Sweet.findById(req.params.id);
+    if (!sweet) {
+      return res.status(404).json({ message: "Sweet not found" });
+    }
+
+    const amount = Number(req.body.amount);
+    if (!Number.isInteger(amount) || amount <= 0) {
+      return res
+        .status(400)
+        .json({ message: "Purchase amount must be positive" });
+    }
+
+    if (sweet.quantity < amount) {
+      return res.status(400).json({ message: "Insufficient stock" });
+    }
+
+    sweet.quantity -= amount;
+    await sweet.save();
+
+    res.status(200).json({ sweet });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// POST /api/sweets/:id/restock (admin only)
+router.post(
+  "/:id/restock",
+  requireAuth,
+  requireRole("admin"),
+  async (req, res) => {
+    try {
+      const sweet = await Sweet.findById(req.params.id);
+      if (!sweet) {
+        return res.status(404).json({ message: "Sweet not found" });
+      }
+
+      const amount = Number(req.body.amount);
+      if (!Number.isInteger(amount) || amount <= 0) {
+        return res
+          .status(400)
+          .json({ message: "Restock amount must be positive" });
+      }
+
+      sweet.quantity += amount;
+      await sweet.save();
+
+      res.status(200).json({ sweet });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+);
 
 export default router;
