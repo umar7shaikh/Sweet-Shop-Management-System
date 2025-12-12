@@ -182,26 +182,26 @@ Base path: `/api/sweets`
 ---
 
 ## Project Structure
-
+```
 src/
 ├── app.js
 ├── server.js
 ├── config/
-│ └── db.js
+│   └── db.js
 ├── middleware/
-│ └── authMiddleware.js
+│   └── authMiddleware.js
 ├── models/
-│ ├── user.model.js
-│ └── sweet.model.js
+│   ├── user.model.js
+│   └── sweet.model.js
 ├── routes/
-│ ├── auth.routes.js
-│ └── sweet.routes.js
+│   ├── auth.routes.js
+│   └── sweet.routes.js
 ├── services/
-│ ├── authService.js
-│ ├── sweetService.js
-│ └── inventoryService.js
+│   ├── authService.js
+│   ├── sweetService.js
+│   └── inventoryService.js
 └── validation/
-└── sweetValidation.js
+    └── sweetValidation.js
 
 scripts/
 └── seed.js
@@ -219,8 +219,7 @@ tests/
 └── inventoryService.test.js
 
 jest.config.mjs
-
----
+```
 
 ## My AI Usage
 
