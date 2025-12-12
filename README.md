@@ -1,249 +1,262 @@
-Sweet Shop Management System (MERN, TDD)
-A full-stack Sweet Shop Management System backend built with Node.js, Express, MongoDB, and Mongoose, following Test-Driven Development (TDD) with Jest and Supertest.​
+# Sweet Shop Management System (MERN, TDD)
 
-This backend provides authentication, sweets management, search, and inventory operations (purchase and restock) with role-based access control.
+Backend for a Sweet Shop Management System built with Node.js, Express, MongoDB, and Mongoose, following Test-Driven Development (TDD) using Jest and Supertest.
 
-Features
-User registration and login with JWT authentication.​
+This service provides authentication, role-based access control, sweets management, search, and inventory (purchase/restock) operations.
 
-Roles: customer and admin with middleware-based checks.​
+---
 
-Sweets management:
+## Features
 
-Create, list, search, update, and delete sweets (admin-protected for write operations).​
+- User registration and login with JWT authentication
+- Roles: `customer` and `admin` with middleware-based access control
+- Sweets:
+  - Create, list, search, update, and delete sweets
+  - Admin-only for create/update/delete
+- Inventory:
+  - Purchase sweets (decrease quantity, validate stock)
+  - Restock sweets (admin-only, increase quantity)
+- Testing:
+  - Jest unit tests and Supertest HTTP integration tests
+- Tooling:
+  - Seed script for admin + sample sweets
+  - Coverage script with Jest coverage report
 
-Inventory:
+---
 
-Purchase sweets (decrease stock, validate availability).
+## Tech Stack
 
-Restock sweets (admin only, increase stock).​
+- **Runtime:** Node.js (ES modules)
+- **Framework:** Express
+- **Database:** MongoDB (Atlas) with Mongoose
+- **Auth:** JWT (`jsonwebtoken`), password hashing with `bcryptjs`
+- **Testing:** Jest, Supertest
+- **Env Management:** dotenv
 
-TDD workflow:
+---
 
-Jest for unit tests and Supertest for HTTP integration tests.​
+## Getting Started
 
-Seed script for creating an initial admin user and sample sweets.
+### 1. Prerequisites
 
-Tech Stack
-Backend: Node.js, Express, JavaScript (ESM).​
+- Node.js (LTS)
+- MongoDB Atlas (or any MongoDB instance)
 
-Database: MongoDB (Atlas) with Mongoose ODM.
+### 2. Installation
 
-Auth: JWT (jsonwebtoken) + bcryptjs for password hashing.​
-
-Testing: Jest, Supertest.​
-
-Getting Started
-Prerequisites
-Node.js (LTS).
-
-MongoDB instance (MongoDB Atlas or local).
-
-npm or yarn.
-
-Installation
-Clone the repository and install dependencies:
-
-bash
-git clone <your-repo-url>.git
+git clone https://github.com/umar7shaikh/Sweet-Shop-Management-System.git
 cd sweet-shop-management-system
 npm install
-Environment Configuration
-Create a .env file in the project root:
 
 text
+
+### 3. Environment variables
+
+Create a `.env` file in the project root:
+
 PORT=4000
 MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>/sweet_shop_db?retryWrites=true&w=majority
 MONGODB_TEST_URI=mongodb+srv://<user>:<password>@<cluster>/sweet_shop_testdb?retryWrites=true&w=majority
 JWT_SECRET=your_jwt_secret_here
-MONGODB_URI is used for dev and seeding.
 
-MONGODB_TEST_URI is used by Jest tests so test data is isolated.
+text
 
-Running the Backend
-Development server:
+- `MONGODB_URI` is used for dev and seeding.
+- `MONGODB_TEST_URI` is used in tests so test data is isolated from dev data.
 
-bash
+---
+
+## Running the backend
+
+Development:
+
 npm run dev
+
+text
+
 Production-style start:
 
-bash
 npm start
+
+text
+
 Health check:
 
-GET /api/health → { "status": "ok", "service": "sweet-shop-api" }
+GET /api/health
 
-Database Seeding
-Seed the database with:
+text
 
-One admin user: admin@sweets.com / AdminPass123!
+Response:
 
-Three sample sweets.
+{ "status": "ok", "service": "sweet-shop-api" }
+
+text
+
+---
+
+## Database seeding
+
+Seed the dev database with:
+
+- One admin user: `admin@sweets.com` / `AdminPass123!`
+- Three sample sweets
 
 Run:
 
-bash
 npm run seed
-This connects to MONGODB_URI, clears existing users and sweets collections, inserts the admin and sample sweets, and closes the connection.
 
-Testing and Coverage
-Run the full test suite:
-
-bash
-npm test
-Run tests with coverage:
-
-bash
-npm run test:coverage
-The coverage report is printed in the console and written to the coverage/ folder, showing high coverage across services, routes, middleware, and validation.
-
-API Endpoints
-Auth Routes
-Base path: /api/auth​
-
-Method	Endpoint	Auth	Description
-POST	/api/auth/register	Public	Register new user
-POST	/api/auth/login	Public	Login and get JWT token
-POST /api/auth/register
-
-Body: { "name": string, "email": string, "password": string }
-
-Response: { "user": { "id", "name", "email", "role" } }
-
-POST /api/auth/login
-
-Body: { "email": string, "password": string }
-
-Response: { "token": string, "user": { "id", "name", "email", "role" } }
-
-Include Authorization: Bearer <token> for protected routes.​
-
-Sweets Routes
-Base path: /api/sweets​
-
-Method	Endpoint	Auth	Description
-POST	/api/sweets	Admin only	Create new sweet
-GET	/api/sweets	Auth	List all sweets
-GET	/api/sweets/search	Auth	Search sweets
-PUT	/api/sweets/:id	Admin only	Update sweet
-DELETE	/api/sweets/:id	Admin only	Delete sweet
-POST	/api/sweets/:id/purchase	Auth	Purchase sweet (decrease quantity)
-POST	/api/sweets/:id/restock	Admin only	Restock sweet (increase quantity)
-Example search:
-
-GET /api/sweets/search?name=Barfi&category=Special&minPrice=150&maxPrice=250
-
-Example purchase:
-
-POST /api/sweets/:id/purchase
-
-Body: { "amount": 2 }
-
-Response: { "sweet": { ... "quantity": newQuantity } }
-
-Example restock:
-
-POST /api/sweets/:id/restock
-
-Body: { "amount": 5 }
-
-Response: { "sweet": { ... "quantity": newQuantity } }​
-
-Project Structure
 text
+
+This uses `MONGODB_URI`, clears `users` and `sweets`, inserts the admin and sample sweets, and closes the connection.
+
+---
+
+## Testing and coverage
+
+Run all tests:
+
+npm test
+
+text
+
+Run with coverage:
+
+npm run test:coverage
+
+text
+
+This generates a coverage report in the console and writes a `coverage/` folder (you can screenshot this for your test report).
+
+---
+
+## API Endpoints
+
+### Auth
+
+Base path: `/api/auth`
+
+- `POST /api/auth/register`  
+  - Body: `{ "name": string, "email": string, "password": string }`  
+  - Response: `{ "user": { "id", "name", "email", "role" } }`
+
+- `POST /api/auth/login`  
+  - Body: `{ "email": string, "password": string }`  
+  - Response: `{ "token": string, "user": { "id", "name", "email", "role" } }`
+
+Use the token as:
+
+Authorization: Bearer <jwt-token>
+
+text
+
+### Sweets
+
+Base path: `/api/sweets`
+
+- `POST /api/sweets` (admin only)  
+  - Create a new sweet.
+
+- `GET /api/sweets` (authenticated)  
+  - List all sweets.
+
+- `GET /api/sweets/search` (authenticated)  
+  - Query parameters: `name`, `category`, `minPrice`, `maxPrice`  
+  - Example: `/api/sweets/search?name=Barfi&category=Special&minPrice=150`
+
+- `PUT /api/sweets/:id` (admin only)  
+  - Update sweet fields.
+
+- `DELETE /api/sweets/:id` (admin only)  
+  - Delete a sweet.
+
+### Inventory
+
+- `POST /api/sweets/:id/purchase` (authenticated)
+  - Body: `{ "amount": number }`
+  - Decreases quantity if stock is sufficient.
+
+- `POST /api/sweets/:id/restock` (admin only)
+  - Body: `{ "amount": number }`
+  - Increases quantity.
+
+---
+
+## Project structure
+
 .
 ├── src
-│   ├── app.js
-│   ├── server.js
-│   ├── config
-│   │   └── db.js
-│   ├── middleware
-│   │   └── authMiddleware.js
-│   ├── models
-│   │   ├── user.model.js
-│   │   └── sweet.model.js
-│   ├── routes
-│   │   ├── auth.routes.js
-│   │   └── sweet.routes.js
-│   ├── services
-│   │   ├── authService.js
-│   │   ├── sweetService.js
-│   │   └── inventoryService.js
-│   └── validation
-│       └── sweetValidation.js
+│ ├── app.js
+│ ├── server.js
+│ ├── config
+│ │ └── db.js
+│ ├── middleware
+│ │ └── authMiddleware.js
+│ ├── models
+│ │ ├── user.model.js
+│ │ └── sweet.model.js
+│ ├── routes
+│ │ ├── auth.routes.js
+│ │ └── sweet.routes.js
+│ ├── services
+│ │ ├── authService.js
+│ │ ├── sweetService.js
+│ │ └── inventoryService.js
+│ └── validation
+│ └── sweetValidation.js
 ├── scripts
-│   └── seed.js
+│ └── seed.js
 ├── tests
-│   ├── health.test.js
-│   ├── authRegister.test.js
-│   ├── authLogin.test.js
-│   ├── authRoutes.test.js
-│   ├── authMiddleware.test.js
-│   ├── sweetValidation.test.js
-│   ├── sweetService.test.js
-│   ├── sweetUpdateDelete.test.js
-│   ├── sweetRoutes.test.js
-│   └── inventoryService.test.js
+│ ├── health.test.js
+│ ├── authRegister.test.js
+│ ├── authLogin.test.js
+│ ├── authRoutes.test.js
+│ ├── authMiddleware.test.js
+│ ├── sweetValidation.test.js
+│ ├── sweetService.test.js
+│ ├── sweetUpdateDelete.test.js
+│ ├── sweetRoutes.test.js
+│ └── inventoryService.test.js
 └── jest.config.mjs
-This structure follows common MERN testing and separation-of-concerns practices.​
 
-My AI Usage
-This project explicitly follows the kata’s requirement to use AI tools transparently and responsibly.​
+text
 
-Tools used
-ChatGPT (OpenAI / Perplexity interface)
-Used as a conversational assistant during backend design and implementation.​
+---
 
-(Optional, if true) GitHub Copilot inside the editor for inline suggestions and small code completions.
+## My AI Usage
 
-How AI was used
-Architecture & planning
+This project follows the kata’s requirement to use AI tools transparently.
 
-Brainstormed the high-level backend design: separating models, services, routes, middleware, and tests in a TDD-friendly structure.​
+### Tools used
 
-Helped refine the list of API endpoints and their responsibilities to match the Sweet Shop Management System kata spec.​
+- **ChatGPT** (via Perplexity)
+- **(Optional, if true)** GitHub Copilot inside the editor for inline suggestions
 
-Boilerplate & scaffolding
+### How AI was used
 
-Assisted in drafting initial Express app setup (middlewares, /api/health endpoint) and Jest/Supertest configuration for ESM (test runner commands and config).​
+- **Planning & architecture**
+  - Helped outline the backend structure (models, services, routes, middleware, tests).
+  - Helped refine the endpoint list to match the Sweet Shop Management System specification.
 
-Suggested example Mongoose schemas for User and Sweet, which were then adapted to the project’s needs.
+- **Boilerplate & setup**
+  - Assisted with Express app setup (middlewares, `/api/health`), Jest + Supertest configuration, and handling ESM + Jest (`--experimental-vm-modules`, `jest.config.mjs`).
+  - Suggested initial shapes for the `User` and `Sweet` Mongoose models, then these were adapted to the project.
 
-TDD support (tests first)
+- **TDD workflow**
+  - Helped brainstorm test cases for:
+    - `validateSweetInput`
+    - Auth services and routes (register/login)
+    - Sweet service + routes (create/list/search/update/delete)
+    - Inventory service + routes (purchase/restock)
+    - Auth middleware (JWT + roles)
+  - Tests were written and then used to drive the implementation.
 
-Helped outline test cases for:
+- **Debugging & refinement**
+  - Assisted in resolving ESM/Jest issues like `"Cannot use import statement outside a module"`.
+  - Helped diagnose path problems between `tests/` and `src/` and refine error handling and inventory logic.
 
-validateSweetInput helper.
+### Reflection on AI impact
 
-Auth service (registerUser, loginUser) and HTTP routes.
-
-Sweet service (create/list/search/update/delete) and corresponding routes.
-
-Inventory operations (purchase/restock) and their HTTP endpoints.​
-
-Used AI for ideas on structuring integration tests with Jest + Supertest and Mongoose test databases, then adjusted to fit the actual codebase.
-
-Debugging and configuration
-
-Helped diagnose Jest ESM issues (Cannot use import statement outside a module) and refine the combination of "type": "module", jest.config.mjs, and --experimental-vm-modules.
-
-Assisted in resolving path issues between tests/ and src/ (e.g., ensuring imports like ../src/models/user.model.js and ../validation/... were correct).
-
-Refinements and error handling
-
-Suggested patterns for centralized error handling and more explicit inventory logic in the routes (purchase/restock) to make debugging and tests more predictable.​
-
-Provided guidance on shaping commit messages that document AI assistance and follow the kata’s co-authorship format.​
-
-Reflection on AI impact
-Productivity boost, especially for setup and edge cases
-AI significantly reduced time spent on boilerplate and environment setup (Jest + ESM, test scripts, seeding script, etc.), letting more effort go into business logic and tests.​
-
-Still required careful review and debugging
-AI suggestions were treated as drafts, not as final code. Many snippets were adapted, simplified, or corrected (for example, tuning the inventory logic and test imports, and making sure error messages and status codes matched the tests and kata spec).​
-
-Better TDD discipline
-Using AI to brainstorm test cases first helped maintain a consistent Red–Green–Refactor cycle, especially for services and routes. This made it easier to avoid regressions as new features (inventory, update/delete) were added.​
-
-Transparency and ownership
-For each commit where AI-assisted code or ideas were used, a Co-authored-by: ChatGPT <AI@users.noreply.github.com> line was added together with a short description of how the assistant contributed, while clearly indicating which parts were implemented, verified, and refactored manually. This respects the kata’s AI usage policy while making it clear the final design and code choices were intentional.​
+- AI sped up setup and reduced time spent on boilerplate and configuration, especially around Jest + ESM and seeding scripts.
+- Suggestions were treated as starting points; code was reviewed, edited, and debugged manually to ensure it matched the kata spec and personal style.
+- Using AI to think through tests first supported a consistent Red–Green–Refactor workflow and made it easier to keep high coverage.
+- For commits where AI helped significantly, a `Co-authored-by: ChatGPT <AI@users.noreply.github.com>` trailer was added, along with a short explanation of how AI was involved, to stay transparent while keeping clear ownership of design and implementation decisions.
