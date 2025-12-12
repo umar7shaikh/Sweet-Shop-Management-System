@@ -1,4 +1,4 @@
-import { validateSweetInput } from "../validation/sweetValidation.js";
+import { validateSweetInput } from "../src/validation/sweetValidation.js";
 
 describe("validateSweetInput", () => {
   it("should be valid for correct sweet data", () => {
