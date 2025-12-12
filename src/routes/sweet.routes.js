@@ -4,6 +4,8 @@ import {
   createSweet,
   getAllSweets,
   searchSweets,
+  updateSweet,
+  deleteSweetById,
 } from "../services/sweetService.js";
 
 const router = express.Router();
@@ -34,6 +36,32 @@ router.get("/search", requireAuth, async (req, res) => {
     maxPrice: maxPrice != null ? Number(maxPrice) : undefined,
   });
   res.status(200).json({ sweets });
+});
+
+// PUT /api/sweets/:id (admin only)
+router.put("/:id", requireAuth, requireRole("admin"), async (req, res) => {
+  try {
+    const updated = await updateSweet(req.params.id, req.body);
+    res.status(200).json({ sweet: updated });
+  } catch (error) {
+    if (error.message === "Sweet not found") {
+      return res.status(404).json({ message: error.message });
+    }
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// DELETE /api/sweets/:id (admin only)
+router.delete("/:id", requireAuth, requireRole("admin"), async (req, res) => {
+  try {
+    await deleteSweetById(req.params.id);
+    res.status(204).send();
+  } catch (error) {
+    if (error.message === "Sweet not found") {
+      return res.status(404).json({ message: error.message });
+    }
+    res.status(400).json({ message: error.message });
+  }
 });
 
 export default router;

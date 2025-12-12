@@ -19,4 +19,16 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/sweets", sweetRoutes);
 
+// 404 handler for unknown API routes
+app.use("/api", (req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+// Basic error handler (fallback)
+app.use((err, req, res, next) => {
+  // eslint-disable-next-line no-console
+  console.error("Unhandled error:", err);
+  res.status(500).json({ message: "Internal server error" });
+});
+
 export default app;

@@ -120,4 +120,38 @@ describe("Sweet HTTP routes", () => {
     expect(res.body.sweets).toHaveLength(1);
     expect(res.body.sweets[0].name).toBe("Kaju Barfi");
   });
+
+  it("should allow admin to update a sweet", async () => {
+    const created = await Sweet.create({
+      name: "Old",
+      category: "Test",
+      price: 50,
+      quantity: 5,
+    });
+
+    const res = await request(app)
+      .put(`/api/sweets/${created._id}`)
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({ name: "New Name", price: 60 });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("sweet");
+    expect(res.body.sweet.name).toBe("New Name");
+    expect(res.body.sweet.price).toBe(60);
+  });
+
+  it("should allow admin to delete a sweet", async () => {
+    const created = await Sweet.create({
+      name: "To Delete",
+      category: "Test",
+      price: 40,
+      quantity: 2,
+    });
+
+    const res = await request(app)
+      .delete(`/api/sweets/${created._id}`)
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(res.statusCode).toBe(204);
+  });
 });
